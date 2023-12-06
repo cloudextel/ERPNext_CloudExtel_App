@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include cloudextel *.css
+recursive-include cloudextel *.csv
+recursive-include cloudextel *.html
+recursive-include cloudextel *.ico
+recursive-include cloudextel *.js
+recursive-include cloudextel *.json
+recursive-include cloudextel *.md
+recursive-include cloudextel *.png
+recursive-include cloudextel *.py
+recursive-include cloudextel *.svg
+recursive-include cloudextel *.txt
+recursive-exclude cloudextel *.pyc
