@@ -110,10 +110,10 @@ class AccountsReceivableSummary	(ReceivablePayableReport):
 
 	def init_party_total(self, row):
 		self.party_total.setdefault(
-			row.company,
 			row.party,
 			frappe._dict(
 				{
+					"company":row.company,
 					"invoiced": 0.0,
 					"paid": 0.0,
 					"credit_note": 0.0,
@@ -245,7 +245,7 @@ def get_gl_balance(report_date, company):
 		frappe.db.get_all(
 			"GL Entry",
 			fields=["party", "sum(debit -  credit)"],
-			filters={"posting_date": ("<=", report_date), "is_cancelled": 0, "company": company},
+			filters={"posting_date": ("<=", report_date), "is_cancelled": 0},
 			group_by="party",
 			as_list=1,
 		)
