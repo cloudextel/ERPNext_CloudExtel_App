@@ -8,7 +8,7 @@ from frappe.utils import cint, flt
 
 from erpnext.accounts.party import get_partywise_advanced_payment_amount
 #from erpnext.accounts.report.accounts_receivable.accounts_receivable import ReceivablePayableReport
-from cloudextel.cloudextel.report.accounts_receivable import ReceivablePayableReport
+from cloudextel.cloudextel.report.account_receivable_custom.account_receivable_custom import ReceivablePayableReport
 
 def execute(filters=None):
 	args = {
@@ -110,6 +110,7 @@ class AccountsReceivableSummary	(ReceivablePayableReport):
 
 	def init_party_total(self, row):
 		self.party_total.setdefault(
+			row.company,
 			row.party,
 			frappe._dict(
 				{
@@ -144,6 +145,12 @@ class AccountsReceivableSummary	(ReceivablePayableReport):
 
 	def get_columns(self):
 		self.columns = []
+		self.add_column(
+			label="Company",
+			fieldname="company",
+			fieldtype="Data",
+			width=100,
+		)
 		self.add_column(
 			label=_("Party Type"),
 			fieldname="party_type",
