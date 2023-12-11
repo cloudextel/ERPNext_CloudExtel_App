@@ -646,7 +646,7 @@ class ReceivablePayableReport(object):
 				or_filters.update({party_field: self.filters.get(party_field)})
 		self.return_entries = frappe._dict(
 			frappe.get_all(
-				doctype, filters=filters, or_filters=or_filters, fields=["name", "return_against","company"], as_list=1
+				doctype, filters=filters, or_filters=or_filters, fields=["name", "return_against"], as_list=1
 			)
 		)
 
