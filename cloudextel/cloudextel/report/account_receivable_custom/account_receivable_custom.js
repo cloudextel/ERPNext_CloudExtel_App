@@ -198,9 +198,9 @@ frappe.query_reports["Account Receivable Custom"] = {
 	},
 
 	onload: function(report) {
-		report.page.add_inner_button(__("Accounts Receivable Summary"), function() {
+		report.page.add_inner_button(__("Account Receivable Summary Custom"), function() {
 			var filters = report.get_values();
-			frappe.set_route('query-report', 'Accounts Receivable Summary Custom');
+			frappe.set_route('query-report', 'Account Receivable Summary Custom');
 		});
 	}
 };
