@@ -19,7 +19,7 @@ def execute(filters=None):
 	return AccountsReceivableSummary(filters).run(args)
 
 
-class AccountsReceivableSummary	(ReceivablePayableReport):
+class AccountsReceivableSummary(ReceivablePayableReport):
 	def run(self, args):
 		self.account_type = args.get("account_type")
 		self.party_type = frappe.db.get_all(

@@ -120,6 +120,7 @@ class ReceivablePayableReport(object):
 			if not key in self.voucher_balance:
 				self.voucher_balance[key] = frappe._dict(
 					company=ple.company,
+					due_date_crr=ple.due_date_crr,
 					voucher_type=ple.voucher_type,
 					voucher_no=ple.voucher_no,
 					party=ple.party,
@@ -208,6 +209,7 @@ class ReceivablePayableReport(object):
 		# get the row where this balance needs to be updated
 		# if its a payment, it will return the linked invoice or will be considered as advance
 		row = self.get_voucher_balance(ple)
+		# if row.due_date:
 		if not row:
 			return
 		if ple.company:
@@ -256,9 +258,18 @@ class ReceivablePayableReport(object):
 			self.data.append({})
 			self.update_sub_total_row(sub_total_row, "Total")
 
+
+	def set_default_date(self,row):
+		if self.is_invoice(row):
+			print(str(row))
+			return frappe.utils.date_diff(row.due_date, row.posting_date)
+			#row['due_date_crr'] = days_difference	
+		return 0 	
+
 	def build_data(self):
 		# set outstanding for all the accumulated balances
 		# as we can use this to filter out invoices without outstanding
+		
 		for key, row in self.voucher_balance.items():
 			row.outstanding = flt(row.invoiced - row.paid - row.credit_note, self.currency_precision)
 			row.outstanding_in_account_currency = flt(
@@ -281,7 +292,8 @@ class ReceivablePayableReport(object):
 					# is an invoice, allocate based on fifo
 					# adds a list `payment_terms` which contains new rows for each term
 					self.allocate_outstanding_based_on_payment_terms(row)
-
+					
+					
 					if row.payment_terms:
 						# make separate rows for each payment term
 						for d in row.payment_terms:
@@ -290,15 +302,19 @@ class ReceivablePayableReport(object):
 
 						# if there is overpayment, add another row
 						self.allocate_extra_payments_or_credits(row)
-					else:
+					else:	
 						self.append_row(row)
 				else:
+					
 					self.append_row(row)
+
+
 
 		if self.filters.get("group_by_party"):
 			self.append_subtotal_row(self.previous_party)
 			if self.data:
 				self.data.append(self.total_row_map.get("Total"))
+			
 
 	def append_row(self, row):
 		self.allocate_future_payments(row)
@@ -748,6 +764,14 @@ class ReceivablePayableReport(object):
 			query = query.orderby(self.ple.posting_date, self.ple.party)
 
 		self.ple_entries = query.run(as_dict=True)
+		entriess = []
+		for ple in self.ple_entries:
+			ple['due_date_crr'] = self.set_default_date(ple)
+			entriess.append(ple)
+			#self.ple_entries.update(ple)
+		self.ple_entries = entriess	
+		
+
 
 	def get_sales_invoices_or_customers_based_on_sales_person(self):
 		if self.filters.get("sales_person"):
@@ -1051,6 +1075,12 @@ class ReceivablePayableReport(object):
 
 		if self.filters.show_remarks:
 			self.add_column(label=_("Remarks"), fieldname="remarks", fieldtype="Text", width=200),
+		self.add_column(
+			label="Due Date CRR",
+			fieldname="due_date_crr",
+			fieldtype="Data",
+			width=100,
+		)
 
 	def add_column(self, label, fieldname=None, fieldtype="Currency", options=None, width=120):
 		if not fieldname:
@@ -1117,3 +1147,5 @@ class ReceivablePayableReport(object):
 			.run()
 		)
 		self.err_journals = [x[0] for x in results] if results else []
+
+
