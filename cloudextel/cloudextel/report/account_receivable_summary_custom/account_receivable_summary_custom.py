@@ -19,6 +19,21 @@ def execute(filters=None):
 	return AccountsReceivableSummary(filters).run(args)
 
 
+
+
+def get_count(data):
+	company = []
+	dic={}
+	for i in data:
+		if dic.get(i['company']):
+			dic[i['company']] += 1
+		else:
+			dic[i['company']] = 1
+		if i['company'] not in company:
+			company.append(i['company'])
+	msg = str(dic) + ":" + str(company)
+	frappe.log_error(message=msg,title="MESG")
+
 class AccountsReceivableSummary(ReceivablePayableReport):
 	def run(self, args):
 		self.account_type = args.get("account_type")
@@ -30,15 +45,17 @@ class AccountsReceivableSummary(ReceivablePayableReport):
 		)
 		self.get_columns()
 		self.get_data(args)
-
+	
 		return self.columns, self.data
 
 	def get_data(self, args):
 		self.data = []
 		self.receivables = ReceivablePayableReport(self.filters).run(args)[1]
-
+		
+		
+		get_count(self.receivables)
 		self.get_party_total(args)
-
+		
 		party = None
 		for party_type in self.party_type:
 			if self.filters.get(scrub(party_type)):
@@ -54,6 +71,7 @@ class AccountsReceivableSummary(ReceivablePayableReport):
 			)
 			or {}
 		)
+		
 
 		if self.filters.show_gl_balance:
 			gl_balance_map = get_gl_balance(self.filters.report_date, self.filters.company)
@@ -89,7 +107,7 @@ class AccountsReceivableSummary(ReceivablePayableReport):
 
 			if self.filters.show_future_payments:
 				row.remaining_balance = flt(row.outstanding) - flt(row.future_amount)
-
+			
 			self.data.append(row)
 
 	def get_party_total(self, args):
@@ -97,7 +115,6 @@ class AccountsReceivableSummary(ReceivablePayableReport):
 
 		for d in self.receivables:
 			self.init_party_total(d)
-
 			# Add all amount columns
 			for k in list(self.party_total[d.party]):
 				if k not in ["currency", "sales_person"]:
@@ -107,13 +124,14 @@ class AccountsReceivableSummary(ReceivablePayableReport):
 			# set territory, customer_group, sales person etc
 			self.set_party_details(d)
 			self.party_total[d.party].update({"party_type": d.party_type})
+		
 
 	def init_party_total(self, row):
 		self.party_total.setdefault(
 			row.party,
 			frappe._dict(
 				{
-					"company":row.company,
+					"company":"",
 					"invoiced": 0.0,
 					"paid": 0.0,
 					"credit_note": 0.0,

@@ -39,6 +39,14 @@ def execute(filters=None):
 	}
 	return ReceivablePayableReport(filters).run(args)
 
+def get_count(data):
+	dic = {}
+	for i in data:
+		if dic.get(i['company']):
+			dic[i['company']] +=1
+		else:
+			dic[i['company']] = 1	
+	print(str(dic))		
 
 class ReceivablePayableReport(object):
 	def __init__(self, filters=None):
@@ -61,11 +69,12 @@ class ReceivablePayableReport(object):
 		self.get_columns()
 		self.get_data()
 		self.get_chart_data()
+		get_count(self.data)
 		return self.columns, self.data, None, self.chart, None, self.skip_total_row
 
 	def set_defaults(self):
-		if not self.filters.get("company"):
-			self.filters.company = frappe.db.get_single_value("Global Defaults", "default_company")
+		# if not self.filters.get("company"):
+		# 	self.filters.company = frappe.db.get_single_value("Global Defaults", "default_company")
 		self.company_currency = frappe.get_cached_value(
 			"Company", self.filters.get("company"), "default_currency"
 		)
@@ -261,7 +270,6 @@ class ReceivablePayableReport(object):
 
 	def set_default_date(self,row):
 		if self.is_invoice(row):
-			print(str(row))
 			return frappe.utils.date_diff(row.due_date, row.posting_date)
 			#row['due_date_crr'] = days_difference	
 		return 0 	
@@ -770,6 +778,7 @@ class ReceivablePayableReport(object):
 			entriess.append(ple)
 			#self.ple_entries.update(ple)
 		self.ple_entries = entriess	
+		print(len([ i for i in entriess if i.get('company') == 'Excel Telesonic India Private Limited']))
 		
 
 
@@ -796,17 +805,16 @@ class ReceivablePayableReport(object):
 		self.qb_selection_filter = []
 		self.or_filters = []
 
+	
 		for party_type in self.party_type:
-			party_type_field = scrub(party_type)
-			self.or_filters.append(self.ple.party_type == party_type)
+			self.add_common_filters()
 
-			self.add_common_filters(party_type_field=party_type_field)
-
-			if party_type_field == "customer":
+			if self.account_type == "Receivable":
 				self.add_customer_filters()
 
-			elif party_type_field == "supplier":
+			elif self.account_type == "Payable":
 				self.add_supplier_filters()
+
 
 		if self.filters.cost_center:
 			self.get_cost_center_conditions()
@@ -821,15 +829,15 @@ class ReceivablePayableReport(object):
 		]
 		self.qb_selection_filter.append(self.ple.cost_center.isin(cost_center_list))
 
-	def add_common_filters(self, party_type_field):
+	def add_common_filters(self):
 		# if self.filters.company:
 		# 	self.qb_selection_filter.append(self.ple.company == self.filters.company)
 
 		if self.filters.finance_book:
 			self.qb_selection_filter.append(self.ple.finance_book == self.filters.finance_book)
 
-		if self.filters.get(party_type_field):
-			self.qb_selection_filter.append(self.ple.party == self.filters.get(party_type_field))
+		# if self.filters.get(party_type_field):
+		# 	self.qb_selection_filter.append(self.ple.party == self.filters.get(party_type_field))
 
 		if self.filters.get("party_type"):
 			self.qb_selection_filter.append(self.filters.party_type == self.ple.party_type)
@@ -857,7 +865,13 @@ class ReceivablePayableReport(object):
 		self.customer = qb.DocType("Customer")
 
 		if self.filters.get("customer_group"):
-			self.get_hierarchical_filters("Customer Group", "customer_group")
+			groups = get_customer_group_with_children(self.filters.customer_group)
+			customers = (
+				qb.from_(self.customer)
+				.select(self.customer.name)
+				.where(self.customer["customer_group"].isin(groups))
+			)
+			self.qb_selection_filter.append(self.ple.party.isin(customers))
 
 		if self.filters.get("territory"):
 			self.get_hierarchical_filters("Territory", "territory")
@@ -1137,8 +1151,7 @@ class ReceivablePayableReport(object):
 			qb.from_(je)
 			.select(je.name)
 			.where(
-				(je.company == self.filters.company) or True
-				& (je.posting_date.lte(self.filters.report_date))
+				 (je.posting_date.lte(self.filters.report_date))
 				& (
 					(je.voucher_type == "Exchange Rate Revaluation")
 					| (je.voucher_type == "Exchange Gain Or Loss")
@@ -1149,3 +1162,17 @@ class ReceivablePayableReport(object):
 		self.err_journals = [x[0] for x in results] if results else []
 
 
+def get_customer_group_with_children(customer_groups):
+	if not isinstance(customer_groups, list):
+		customer_groups = [d.strip() for d in customer_groups.strip().split(",") if d]
+
+	all_customer_groups = []
+	for d in customer_groups:
+		if frappe.db.exists("Customer Group", d):
+			lft, rgt = frappe.db.get_value("Customer Group", d, ["lft", "rgt"])
+			children = frappe.get_all("Customer Group", filters={"lft": [">=", lft], "rgt": ["<=", rgt]})
+			all_customer_groups += [c.name for c in children]
+		else:
+			frappe.throw(_("Customer Group: {0} does not exist").format(d))
+
+	return list(set(all_customer_groups))
