@@ -3,7 +3,7 @@ from frappe import _
 def get_data():
 	return [
 		{
-			"module_name": "Cloudextel",
+			"module_name": "CloudExtel",
 			"type": "module",
 			"label": _("CloudExtel")
 		}

@@ -1,7 +1,7 @@
 from . import __version__ as app_version
 
 app_name = "cloudextel"
-app_title = "Cloudextel"
+app_title = "CloudExtel"
 app_publisher = "samarth uapre"
 app_description = "it is app"
 app_email = "s.upare@cloudextel.com"
