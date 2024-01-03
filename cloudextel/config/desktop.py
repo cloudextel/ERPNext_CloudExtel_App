@@ -5,6 +5,6 @@ def get_data():
 		{
 			"module_name": "Cloudextel",
 			"type": "module",
-			"label": _("Cloudextel")
+			"label": _("CloudExtel")
 		}
 	]
