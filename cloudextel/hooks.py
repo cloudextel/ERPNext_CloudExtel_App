@@ -5,7 +5,7 @@ app_title = "CloudExtel"
 app_publisher = "samarth uapre"
 app_description = "it is app"
 app_email = "s.upare@cloudextel.com"
-app_license = "l"
+app_license = "li"
 
 # Includes in <head>
 # ------------------
