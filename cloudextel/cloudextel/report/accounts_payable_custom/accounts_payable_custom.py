@@ -43,6 +43,6 @@ def customcheck(filters=None,comp=None):
 	print(len(da),p1,t1,t == t1)
 	s = [ i for i in li1 if i not in li]
 	ps = [ i for i in li if i not in li1]
-	print("LIIII",len(s),s,len(ps),ps)
+	print("LIcIII",len(s),s,len(ps),ps)
 
 
