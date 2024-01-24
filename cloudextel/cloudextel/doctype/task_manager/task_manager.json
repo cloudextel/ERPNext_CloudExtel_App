@@ -9,6 +9,7 @@
  "field_order": [
   "task_id",
   "task_name",
+  "task_owner",
   "task_description",
   "start_date",
   "due_date",
@@ -16,6 +17,7 @@
   "closure_date",
   "status",
   "next_task_link",
+  "next_task_name",
   "assign_to",
   "age",
   "reply"
@@ -103,11 +105,25 @@
    "fieldtype": "Check",
    "hidden": 1,
    "label": "reply"
+  },
+  {
+   "fieldname": "task_owner",
+   "fieldtype": "Link",
+   "label": "Task Creator",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "next_task_link.task_name",
+   "fieldname": "next_task_name",
+   "fieldtype": "Data",
+   "label": "Next Task Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-24 12:11:09.612143",
+ "modified": "2024-01-24 13:54:36.591306",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "Task Manager",

@@ -128,7 +128,7 @@ def on_comment_add(doc, method):
 
         if doca.reply is None:
             subject = f"Task - {doca.task_name} Trails"
-            recipients = [doca.custom_task_owner] + [i.user for i in doca.assign_to]
+            recipients = [doca.task_owner] + [i.user for i in doca.assign_to]
             cc_recipients = [recipients[0]] + recipients[2:]
             frappe.sendmail(recipients=[recipients[1]], subject=subject, message=html_content,cc=",".join(cc_recipients))
             print('Email Success..!!')
@@ -138,7 +138,7 @@ def on_comment_add(doc, method):
         else:
             default_sender = frappe.get_value('Email Account', {'default_outgoing': 1}, 'email_id')
             subject = f"Re: Task - {doca.task_name} Trails"
-            recipients = [doca.custom_task_owner] + [i.user for i in doca.assign_to]
+            recipients = [doca.task_owner] + [i.user for i in doca.assign_to]
             cc_recipients = [recipients[0]] + recipients[2:]
             frappe.sendmail(recipients=[recipients[1]], reply_to=default_sender, subject=subject, message=html_content,cc=",".join(cc_recipients))
             print('Email Success..!!')
@@ -191,7 +191,7 @@ def send_email_notification(task,all_dependant_task_data,due_date_cross=False):
                        <td> {_task_li['due_date'].strftime("%d-%b-%Y")}</td> 
                        <td> {_task_li['closure_date'].strftime('%d-%b-%Y') if _task_li.get('closure_date') else "" }</td> 
                         <td> {_task_li['age']  if _task_li['status'] == 'Closed' and _task_li.get('closure_date') else 0 }</td> 
-                        <td> {_task_li['custom_next_task_name'] if _task_li.get('custom_next_task_name') else ""}</td>
+                        <td> {_task_li['next_task_name'] if _task_li.get('next_task_name') else ""}</td>
                         <td> {_task_li['status']}</td> 
                         </tr> 
                     """
@@ -332,7 +332,7 @@ def task_master_email_utils(etype,task,content,lag=0):
                             due_date=task.due_date)
             recipients = assign_to
             message += content
-            cc = task.custom_task_owner
+            cc = task.task_owner
             message  = get_table_html() + message
             print(message,recipients,subject,cc)
             frappe.sendmail(recipients=recipients,subject=subject,message=message,cc=cc)
@@ -346,7 +346,7 @@ def task_master_email_utils(etype,task,content,lag=0):
                             due_date=task.due_date,lag=lag)
             recipients = assign_to
             message += content
-            cc = task.custom_task_owner
+            cc = task.task_owner
             frappe.sendmail(recipients=recipients,subject=subject,message=message,cc=cc)  
         elif  etype == 3:
             assign_to = [i.user for i in task.assign_to]
@@ -358,7 +358,7 @@ def task_master_email_utils(etype,task,content,lag=0):
                             due_date=task.due_date,lag=lag)
             recipients = assign_to
             message += content
-            cc = task.custom_task_owner
+            cc = task.task_owner
             frappe.sendmail(recipients=recipients,subject=subject,message=message,cc=cc)     
     except Exception as e:
         print(str(e))

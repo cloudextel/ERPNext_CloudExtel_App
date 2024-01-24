@@ -1,7 +1,7 @@
 frappe.listview_settings['Task Manager'] = {
     hide_name_column: true,
     filters: [
-        ['Task Manager','custom_task_owner', '=', frappe.session.user_name]
+        ['Task Manager','task_owner', '=', frappe.session.user_name]
     ],
     // onload: function(listview) {
     //     // Get the current user
