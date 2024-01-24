@@ -93,11 +93,10 @@
   {
    "default": "New",
    "fieldname": "status",
-   "fieldtype": "Select",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Status",
-   "options": "Open\nHold\nClosed\nNew"
+   "label": "Status"
   },
   {
    "default": "0",
@@ -123,7 +122,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-24 13:54:36.591306",
+ "modified": "2024-01-24 14:51:08.061247",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "Task Manager",
