@@ -118,14 +118,14 @@ app_license = "li"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-#	"*": {
-#		"on_update": "method",
-#		"on_cancel": "method",
-#		"on_trash": "method"
-#	}
-# }
-
+doc_events = {
+    "Comment": {
+        "after_insert": "cloudextel.notify.on_comment_add"
+    },
+    "Task Manager":{
+        "on_update":"cloudextel.notify.check_workflow_for_tm"
+    }
+}
 # Scheduled Tasks
 # ---------------
 
