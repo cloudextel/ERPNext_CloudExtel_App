@@ -64,6 +64,7 @@ def on_comment_add(doc, method):
         # Your custom logic for when a comment is added to TaskManager
         print(frappe.as_json(doc))
         doca = frappe.get_doc('Task Manager',doc.reference_name)
+        url = doca.get_url()
         c_Data = frappe.db.sql("""
                             
                             SELECT * FROM `tabComment`
@@ -100,6 +101,7 @@ def on_comment_add(doc, method):
             <h4> Description - {doca.task_description} </h4>
             <h4> Start Date - {doca.start_date.strftime("%d-%b-%Y")} </h4>
             <h4> Due Date - {doca.due_date.strftime("%d-%b-%Y")} </h4>
+            <h4> Link - <a href={url}>{url}</a></h4>
 
             <table>
                 <tr>
@@ -125,6 +127,7 @@ def on_comment_add(doc, method):
         </body>
         </html>
         """
+        print(html_content)
 
         if doca.reply is None:
             subject = f"Task - {doca.task_name} Trails"
@@ -137,10 +140,10 @@ def on_comment_add(doc, method):
             frappe.db.commit()
         else:
             default_sender = frappe.get_value('Email Account', {'default_outgoing': 1}, 'email_id')
-            subject = f"Re: Task - {doca.task_name} Trails"
+            subject = f"RE: Task - {doca.task_name} Trails"
             recipients = [doca.task_owner] + [i.user for i in doca.assign_to]
             cc_recipients = [recipients[0]] + recipients[2:]
-            frappe.sendmail(recipients=[recipients[1]], reply_to=default_sender, subject=subject, message=html_content,cc=",".join(cc_recipients))
+            frappe.sendmail(recipients=[recipients[1]], reply_to=default_sender,cc=", ".join(cc_recipients),bcc=", ".join(cc_recipients), subject=subject, message=html_content,reference_doctype='Task Manager',reference_name=doca.name)
             print('Email Success..!!')
 
         
@@ -189,13 +192,14 @@ def send_email_notification(task,all_dependant_task_data,due_date_cross=False):
                        <td> {_task_li['task_name']}</td> 
                        <td> {_task_li['start_date'].strftime("%d-%b-%Y")}</td> 
                        <td> {_task_li['due_date'].strftime("%d-%b-%Y")}</td> 
-                       <td> {_task_li['closure_date'].strftime('%d-%b-%Y') if _task_li.get('closure_date') else "" }</td> 
+                       <td> {_task_li['closure_date'].strftime('%d-%b-%Y') if _task_li.get('closure_date') else "-" }</td> 
                         <td> {_task_li['age']  if _task_li['status'] == 'Closed' and _task_li.get('closure_date') else 0 }</td> 
-                        <td> {_task_li['next_task_name'] if _task_li.get('next_task_name') else ""}</td>
+                        <td> {_task_li['next_task_name'] if _task_li.get('next_task_name') else "-"}</td>
                         <td> {_task_li['status']}</td> 
                         </tr> 
                     """
-        content += """</table></body></html>"""
+        index +=1
+    content += """</table></body></html>"""
     if due_date_cross:
         lag = date_diff(today(),task['due_date'])
         task_master_email_utils(2,frappe.get_doc('Task Manager',task['name']),content,lag)        
@@ -329,7 +333,7 @@ def task_master_email_utils(etype,task,content,lag=0):
             message = template.format(assign=",".join(assign_to),
                             name=task.task_name,
                             desc=task.task_description,
-                            due_date=task.due_date)
+                            due_date=task.due_date.strftime("%d-%b-%Y"))
             recipients = assign_to
             message += content
             cc = task.task_owner
@@ -343,7 +347,7 @@ def task_master_email_utils(etype,task,content,lag=0):
             message = template.format(assign=",".join(assign_to),
                             name=task.task_name,
                             desc=task.task_description,
-                            due_date=task.due_date,lag=lag)
+                            due_date=task.due_date.strftime("%d-%b-%Y"),lag=lag)
             recipients = assign_to
             message += content
             cc = task.task_owner
@@ -355,10 +359,62 @@ def task_master_email_utils(etype,task,content,lag=0):
             message = template.format(assign=",".join(assign_to),
                             name=task.task_name,
                             desc=task.task_description,
-                            due_date=task.due_date,lag=lag)
+                            due_date=task.due_date.strftime("%d-%b-%Y"),lag=lag)
             recipients = assign_to
             message += content
             cc = task.task_owner
             frappe.sendmail(recipients=recipients,subject=subject,message=message,cc=cc)     
     except Exception as e:
         print(str(e))
+
+
+
+
+@frappe.whitelist()
+def send_email_with_css(doc=None,method=None):
+    # Recipient email address
+    to_email = "s.upare@cloudextel.com"
+
+    # Email subject
+    subject = "Sample Email with Inline CSS"
+
+    # Email body with inline CSS
+    html_content = """
+    <html>
+    <head>
+        <style>
+            /* Add your CSS styles here */
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                color: #333;
+                padding: 20px;
+            }
+
+            h1 {
+                color: #4285f4;
+            }
+
+            p {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Hello, Frappe!</h1>
+        <p>This is a sample email with inline CSS styles.</p>
+        <p>You can customize the styles in the &lt;style&gt; tag above.</p>
+    </body>
+    </html>
+    """
+
+    # Send the email
+    frappe.sendmail(
+        recipients=[to_email],
+        subject=subject,
+        message=html_content,
+        cc=["samarthupare1935@gmail.com"]
+    )
+
+    print('SHEHEHEH',to_email,subject,html_content)
