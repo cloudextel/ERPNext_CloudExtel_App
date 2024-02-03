@@ -14,6 +14,11 @@ frappe.ui.form.on('Task Manager', {
         }
     },
     refresh: function (frm) {
+        // frm.add_custom_button(__('Custom Button'), function() {
+        //     // Your custom button logic here
+        //     frappe.msgprint('Custom button clicked!');
+        // }, __("Actions"));
+      
            // Set task_owner to the current user's email on load
 		if(!frm.doc.task_owner){
 			cur_frm.set_value('task_owner', frappe.session.user_email);
@@ -43,3 +48,8 @@ frappe.ui.form.on('Task Manager', {
     },	
 	
 });
+
+
+
+
+

@@ -1,0 +1,14 @@
+{% extends "templates/pages/form/form.html" %}
+
+{% block main %}
+    {{ block.super() }}
+    <div class="form-group">
+        <label class="control-label">{{ __("Custom Toggle") }}</label>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" data-fieldname="custom_toggle">
+                <span class="indicator"></span>
+            </label>
+        </div>
+    </div>
+{% endblock %}

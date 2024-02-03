@@ -1,5 +1,10 @@
 import frappe
 
+from frappe.contacts.address_and_contact import (
+	delete_contact_and_address,
+	load_address_and_contact,
+)
+
 def increment_last_two_digits(string):
     return string[:-2] + str(int(string[-2:]) + 1).zfill(2) if len(string) >= 2 and string[-2:].isdigit() else string
 
@@ -50,7 +55,13 @@ def perform_task():
         print("Error:", e)
 
 
-            
+
+def check():
+    do = frappe.get_doc('Supplier','VEN-101614')
+    print(frappe.as_json(do))
+    load_address_and_contact(do)            
+
+
 
 
 

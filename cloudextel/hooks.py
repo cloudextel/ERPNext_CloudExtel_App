@@ -98,9 +98,9 @@ app_license = "li"
 # -----------
 # Permissions evaluated in scripted ways
 
-# permission_query_conditions = {
-#	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
+permission_query_conditions = {
+	"Task Manager":"cloudextel.events.apply_custom_filter_to_task_manager"
+}
 #
 # has_permission = {
 #	"Event": "frappe.desk.doctype.event.event.has_permission",
@@ -124,7 +124,8 @@ doc_events = {
     },
     "Task Manager":{
         "on_update":"cloudextel.notify.check_workflow_for_tm"
-    }
+    },
+
 }
 # Scheduled Tasks
 # ---------------

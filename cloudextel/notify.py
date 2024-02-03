@@ -131,9 +131,9 @@ def on_comment_add(doc, method):
 
         if doca.reply is None:
             subject = f"Task - {doca.task_name} Trails"
-            recipients = [doca.task_owner] + [i.user for i in doca.assign_to]
-            cc_recipients = [recipients[0]] + recipients[2:]
-            frappe.sendmail(recipients=[recipients[1]], subject=subject, message=html_content,cc=",".join(cc_recipients))
+            recipients = [doca.task_owner] + ([] if len(doca.assign_to)<= 0 else [i.user for i in doca.assign_to])
+            cc_recipients = [] if len(recipients)<=1 else [recipients[0]] + recipients[2:]
+            frappe.sendmail(recipients=[recipients[1] if len(recipients)>1 else recipients[0]], subject=subject, message=html_content,cc=",".join(cc_recipients))
             print('Email Success..!!')
             doca.reply = 1
             doca.save()
@@ -141,9 +141,9 @@ def on_comment_add(doc, method):
         else:
             default_sender = frappe.get_value('Email Account', {'default_outgoing': 1}, 'email_id')
             subject = f"RE: Task - {doca.task_name} Trails"
-            recipients = [doca.task_owner] + [i.user for i in doca.assign_to]
-            cc_recipients = [recipients[0]] + recipients[2:]
-            frappe.sendmail(recipients=[recipients[1]], reply_to=default_sender,cc=", ".join(cc_recipients),bcc=", ".join(cc_recipients), subject=subject, message=html_content,reference_doctype='Task Manager',reference_name=doca.name)
+            recipients = [doca.task_owner] + ([] if len(doca.assign_to)<= 0 else [i.user for i in doca.assign_to])
+            cc_recipients =  [] if len(recipients)<=1 else [recipients[0]] + recipients[2:]
+            frappe.sendmail(recipients=[recipients[1] if len(recipients)>1 else recipients[0]], reply_to=default_sender,cc=", ".join(cc_recipients),bcc=", ".join(cc_recipients), subject=subject, message=html_content,reference_doctype='Task Manager',reference_name=doca.name)
             print('Email Success..!!')
 
         
