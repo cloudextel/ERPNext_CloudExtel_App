@@ -109,6 +109,7 @@ def on_comment_add(doc, method):
                     <th>Comment By</th>
                     <th>Content</th>
                     <th>Time</th>
+                    <th>Assigned To </th>
                 </tr>
         """
 
@@ -119,6 +120,7 @@ def on_comment_add(doc, method):
                     <td>{ row.get('owner') +" Changes Status to" if row.get('comment_by',None) is None else row.get('comment_by') }</td>
                     <td>{row.get('content', '')}</td>
                     <td>{row.get('creation').strftime("%d-%b-%Y %I.%M %p")}</td>
+                    <td>{row.get('assignees')}</td>
                 </tr>
             """
 
@@ -200,6 +202,7 @@ def send_email_notification(task,all_dependant_task_data,due_date_cross=False):
                     """
         index +=1
     content += """</table></body></html>"""
+    print(content,"--")
     if due_date_cross:
         lag = date_diff(today(),task['due_date'])
         task_master_email_utils(2,frappe.get_doc('Task Manager',task['name']),content,lag)        
@@ -330,7 +333,8 @@ def task_master_email_utils(etype,task,content,lag=0):
             assign_to = [i.user for i in task.assign_to]
             subject = f"Task - {task.task_name} Pending (Due Date - {task.due_date})"
             template = frappe.get_doc('Email Template','Task Manager - Pending Near Due').response
-            message = template.format(assign=",".join(assign_to),
+            assign_to_names = get_assign_to_names(assign_to)
+            message = template.format(assign=",".join(assign_to_names),
                             name=task.task_name,
                             desc=task.task_description,
                             due_date=task.due_date.strftime("%d-%b-%Y"))
@@ -340,11 +344,12 @@ def task_master_email_utils(etype,task,content,lag=0):
             message  = get_table_html() + message
             print(message,recipients,subject,cc)
             frappe.sendmail(recipients=recipients,subject=subject,message=message,cc=cc)
-        elif etype== 2:
+        elif etype == 2:
             assign_to = [i.user for i in task.assign_to]
             subject = f"Task - {task.task_name} Pending (Exceeds Due Date - {task.due_date})"
             template = frappe.get_doc('Email Template','Task Manager - Post Due Date').response
-            message = template.format(assign=",".join(assign_to),
+            assign_to_names = get_assign_to_names(assign_to)
+            message = template.format(assign=",".join(assign_to_names),
                             name=task.task_name,
                             desc=task.task_description,
                             due_date=task.due_date.strftime("%d-%b-%Y"),lag=lag)
@@ -356,7 +361,8 @@ def task_master_email_utils(etype,task,content,lag=0):
             assign_to = [i.user for i in task.assign_to]
             subject = f"Task - {task.task_name} Pending (Exceeds Due Date - {task.due_date})"
             template = frappe.get_doc('Email Template','Task Manager - Post Due Date Parent').response
-            message = template.format(assign=",".join(assign_to),
+            assign_to_names = get_assign_to_names(assign_to)
+            message = template.format(assign=",".join(assign_to_names),
                             name=task.task_name,
                             desc=task.task_description,
                             due_date=task.due_date.strftime("%d-%b-%Y"),lag=lag)
@@ -368,6 +374,19 @@ def task_master_email_utils(etype,task,content,lag=0):
         print(str(e))
 
 
+
+
+
+
+def get_assign_to_names(emails):
+    resp_data = frappe.db.sql("""
+        SELECT full_name, name AS `tabUser`
+        FROM `tabUser`
+        WHERE name IN %(lis)s
+        """, {'lis': tuple(emails)}, as_dict=1)
+    if len(resp_data):
+        return [ i['full_name'] for i in resp_data]
+    return []
 
 
 @frappe.whitelist()
