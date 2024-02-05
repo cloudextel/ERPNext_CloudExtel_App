@@ -119,6 +119,7 @@
    "fetch_from": "next_task_link.task_name",
    "fieldname": "next_task_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Next Task Name",
    "read_only": 1
   },
@@ -134,7 +135,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-03 13:32:26.989144",
+ "modified": "2024-02-05 11:17:07.873398",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "Task Manager",
