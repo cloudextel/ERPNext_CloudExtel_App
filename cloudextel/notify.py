@@ -120,7 +120,7 @@ def on_comment_add(doc, method):
                     <td>{ row.get('owner') +" Changes Status to" if row.get('comment_by',None) is None else row.get('comment_by') }</td>
                     <td>{row.get('content', '')}</td>
                     <td>{row.get('creation').strftime("%d-%b-%Y %I.%M %p")}</td>
-                    <td>{row.get('assignees')}</td>
+                    <td>{doca.get('assignees')} </td>
                 </tr>
             """
 
