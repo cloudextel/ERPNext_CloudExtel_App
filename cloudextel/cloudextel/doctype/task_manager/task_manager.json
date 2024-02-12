@@ -23,7 +23,12 @@
   "assign_to",
   "age",
   "reply",
-  "assignees"
+  "assignees",
+  "lft",
+  "rgt",
+  "is_group",
+  "old_parent",
+  "parent_task_manager"
  ],
  "fields": [
   {
@@ -51,7 +56,6 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Start Date",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -131,15 +135,51 @@
    "in_standard_filter": 1,
    "label": "Assignees",
    "length": 999
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "Old Parent",
+   "options": "Task Manager"
+  },
+  {
+   "fieldname": "parent_task_manager",
+   "fieldtype": "Link",
+   "label": "Parent Task Manager",
+   "options": "Task Manager"
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_tree": 1,
  "links": [],
- "modified": "2024-02-05 11:17:07.873398",
+ "modified": "2024-02-05 22:32:48.396836",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "Task Manager",
  "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_task_manager",
  "owner": "Administrator",
  "permissions": [
   {

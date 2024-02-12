@@ -125,6 +125,9 @@ doc_events = {
     "Task Manager":{
         "on_update":"cloudextel.notify.check_workflow_for_tm"
     },
+    "CE Task Manager":{
+        "before_save":"cloudextel.ce_task_manager.check_conditions"
+    }
 
 }
 # Scheduled Tasks

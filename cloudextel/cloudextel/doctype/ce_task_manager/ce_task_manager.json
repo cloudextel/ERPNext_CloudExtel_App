@@ -1,0 +1,151 @@
+{
+ "_user_tags": ",",
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "CE-TASK-.YYYY.-.####",
+ "creation": "2024-02-05 23:25:38.764431",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "subject",
+  "is_group",
+  "start_date",
+  "due_date",
+  "actual_start_date",
+  "actual_end_date",
+  "age",
+  "column_break_t391o",
+  "status",
+  "parent_ce_task_manager",
+  "description",
+  "lft",
+  "rgt",
+  "is_root"
+ ],
+ "fields": [
+  {
+   "fieldname": "subject",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Subject",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  },
+  {
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Open\nWorking\nHold\nClose\nCancelled"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Parent"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Expected Start Date"
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Expected Due Date"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Parent"
+  },
+  {
+   "fieldname": "column_break_t391o",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "age",
+   "fieldtype": "Int",
+   "label": "Age",
+   "read_only": 1
+  },
+  {
+   "fieldname": "parent_ce_task_manager",
+   "fieldtype": "Link",
+   "label": "Parent Task",
+   "options": "CE Task Manager"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_root",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "is_root"
+  },
+  {
+   "fieldname": "actual_start_date",
+   "fieldtype": "Date",
+   "label": "Actual Start Date"
+  },
+  {
+   "fieldname": "actual_end_date",
+   "fieldtype": "Date",
+   "label": "Actual End Date"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_calendar_and_gantt": 1,
+ "is_tree": 1,
+ "links": [],
+ "modified": "2024-02-08 11:39:27.898530",
+ "modified_by": "Administrator",
+ "module": "CloudExtel",
+ "name": "CE Task Manager",
+ "naming_rule": "Expression (old style)",
+ "nsm_parent_field": "parent_ce_task_manager",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "subject",
+ "track_changes": 1
+}

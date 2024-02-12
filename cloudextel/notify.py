@@ -148,10 +148,25 @@ def on_comment_add(doc, method):
             frappe.sendmail(recipients=[recipients[1] if len(recipients)>1 else recipients[0]], reply_to=default_sender,cc=", ".join(cc_recipients),bcc=", ".join(cc_recipients), subject=subject, message=html_content,reference_doctype='Task Manager',reference_name=doca.name)
             print('Email Success..!!')
 
+    elif doc.reference_doctype == "CE Task Manager" and doc.reference_name:
+        doca = frappe.get_doc('CE Task Manager',doc.reference_name)
+        url = doca.get_url()
+        c_Data = frappe.db.sql("""
+                            
+                            SELECT * FROM `tabComment`
+                            WHERE reference_doctype = %(doc)s
+                                AND reference_name = %(name)s
+                               order by creation desc
+                        """, {'doc': 'CE Task Manager', 'name': doca.name, 'ctypes': ('Comment')}, as_dict=True) 
+        
+        print(c_Data,"9999999999")
+    
         
 
         # # Now you can use `formatted_html` in your email sending function
         # print(formatted_html,"----")
+        #   #
+                            # AND comment_type = %(ctypes)s 
 
 
 

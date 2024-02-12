@@ -3,6 +3,10 @@ frappe.listview_settings['Task Manager'] = {
     hide_name_filter:true,
     onload: function(listview) {
         function hideAssignedToField() {
+            const deleteButton = document.getElementById('deleteButton');
+            
+            if (deleteButton)deleteButton.style.display = 'none';
+
             var assignedToFilter = document.querySelector('a[data-fieldname="assigned_to"]');
             if (assignedToFilter) {
                 assignedToFilter.style.display = 'none';
