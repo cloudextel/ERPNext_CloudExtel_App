@@ -72,7 +72,7 @@ def get_tree_data(table_name):
 def process_tree(tree_data):
     # Initialize an empty dictionary to store the processed tree
     processed_tree = {}
-
+    indexes = {i['name']:i for i in tree_data}
     # Iterate through each node in the tree data
     for node in tree_data:
         # Retrieve node ID and parent ID
@@ -84,17 +84,21 @@ def process_tree(tree_data):
             'name': node.get('name'),
 			'subject':node.get('subject'),
             'parent': parent_id,
-			'data':node
+			'data':node,
+			'status':node.get('status')
             # Add other attributes as needed
         }
 
         # Check if the parent ID exists and add the child to its parent
         if parent_id:
             if parent_id not in processed_tree:
+                parent_data = indexes[parent_id]
                 processed_tree[parent_id] = {
                     'name': parent_id,
-                    'children': [node_id]                
-				}
+                    'children': [node_id], 
+                    'data':parent_data,
+                    'status':parent_data.get('status')         
+                }
             else:
                 processed_tree[parent_id].setdefault('children', []).append(node_id)
 
@@ -107,3 +111,11 @@ def prints():
 	tree_data = get_tree_data(h)
 	return tree_data
 
+@frappe.whitelist()
+def is_assigned_or_created_by_user(doc_type, doc_name, user):
+    # Custom logic to check if the user is assigned to or created the CE Task Manager document
+    # You need to implement this based on your requirements
+    # Example logic:
+    value = frappe.db.exists(doc_type, {'name': doc_name, 'owner': user}) or \
+            frappe.db.exists(doc_type, {'name': doc_name, '_assign': ['like', f'%{user}%']})
+    return value if value else False

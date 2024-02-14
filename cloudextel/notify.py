@@ -11,6 +11,8 @@ import datetime
 
 def get_email_from_full_name(full_name):
     # Query the User document to get the email associated with the provided full name
+    if full_name == 'Administrator':
+        return "admin@example.com"
     email = frappe.get_value("User", {"full_name": full_name}, "email")
 
     return email
@@ -224,8 +226,8 @@ def on_comment_add(doc, method):
             <table>
                 <tr>
                     <th>Index</th>
-                    <th>Comment By</th>
                     <th>Content</th>
+                     <th>Comment By</th>
                     <th>Time</th>
                    
                 </tr>
@@ -235,8 +237,8 @@ def on_comment_add(doc, method):
         html += f"""
         <tr>
              <td>{index}</td>
-            <td>{ 'System' if row.get('comment_by',None) is None else row.get('comment_by') }</td>
             <td>{row.get('content', '')}</td>
+             <td>{ 'System' if row.get('comment_by',None) is None else row.get('comment_by') }</td>
             <td>{row.get('creation').strftime("%d-%b-%Y %I.%M %p")}</td>
             
         </tr>
@@ -246,9 +248,12 @@ def on_comment_add(doc, method):
     html += """</body></table>"""
     print(html)
     assign_to = [i[1] for i in processble_assign_to] if len(processble_assign_to)>0 else []
+    if "admin@example.com" in assign_to:
+        assign_to.remove("admin@example.com")
+    print(assign_to)    
     if assign_to:
         subject = f"Task - {doca.subject } Trails"
-        frappe.sendmail(recipients=assign_to, subject=subject, message=html,cc=doca.owner)
+        frappe.sendmail(recipients=assign_to, subject=subject, message=html,cc=doca.owner if doca.owner != 'Administrator' else []) 
         print('Email Success..!!')
         doca.reply = 1
         doca.save()

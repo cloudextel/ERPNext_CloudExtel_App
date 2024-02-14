@@ -30,6 +30,12 @@ frappe.treeview_settings['CE Task Manager'] = {
 		frappe.treeview_settings['CE Task Manager'].page = {};
 		$.extend(frappe.treeview_settings['CE Task Manager'].page, me.page);
 		me.make_tree();
+		me.page.add_inner_button(
+            `<i class="fa fa-list"></i> ${__('View List')}`,
+            function() {
+                window.open('/app/ce-task-manager/view/list/');
+            }
+        );
 	},
     fields:[{
         fieldtype:'Check', fieldname:'is_group', label:__('Is Group'),
