@@ -121,7 +121,7 @@
  "is_calendar_and_gantt": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2024-02-08 11:39:27.898530",
+ "modified": "2024-02-14 16:17:26.587861",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "CE Task Manager",
@@ -146,6 +146,5 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "subject",
- "track_changes": 1
+ "title_field": "subject"
 }

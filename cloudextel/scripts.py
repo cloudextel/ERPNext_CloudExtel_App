@@ -19128,3 +19128,9 @@ def nexe():
 
     frappe.log_error(title='SERVICE PERIOD JOB', message="SUCCESS CNT: {} , FAILED_CNT = {} ,ERROS = {}".format(count,fail_cnt,str(err)))        
 
+
+
+
+@frappe.whitelist()
+def add_comment_from_version(doc,method):
+    print(frappe.as_json(doc))

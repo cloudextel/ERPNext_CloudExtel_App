@@ -2,10 +2,30 @@ import frappe
 from frappe.utils.data import today,getdate,get_datetime,get_datetime_str,date_diff
 from frappe.utils import get_url,get_absolute_url
 from frappe.utils import get_html_format
-from frappe import sendmail
+from frappe import sendmail 
+from frappe.utils.user import get_user_fullname
 import datetime
 
 
+
+
+def get_email_from_full_name(full_name):
+    # Query the User document to get the email associated with the provided full name
+    email = frappe.get_value("User", {"full_name": full_name}, "email")
+
+    return email
+
+
+def get_assign_to_email_from_assignment_string(assignment_string):
+    # Split the assignment string by 'assigned' to get the assigner and assignee
+    parts = assignment_string.split('assigned')
+    
+    if len(parts) < 2:
+        return None  # Return None if the format is not as expected
+    
+    assignee_name = parts[1].split(':')[0].strip()  # The assignee's name is after 'assigned' and before ':'
+    
+    return assignee_name,get_email_from_full_name(str(assignee_name)) 
 
 
 def get_table_html():
@@ -151,22 +171,89 @@ def on_comment_add(doc, method):
     elif doc.reference_doctype == "CE Task Manager" and doc.reference_name:
         doca = frappe.get_doc('CE Task Manager',doc.reference_name)
         url = doca.get_url()
+        asssinees = frappe.db.sql("select _assign from `tabCE Task Manager` where name = %(id)s",{'id':doca.name},as_dict=1)
         c_Data = frappe.db.sql("""
                             
                             SELECT * FROM `tabComment`
-                            WHERE reference_doctype = %(doc)s
+                                WHERE reference_doctype = %(doc)s
                                 AND reference_name = %(name)s
-                               order by creation desc
-                        """, {'doc': 'CE Task Manager', 'name': doca.name, 'ctypes': ('Comment')}, as_dict=True) 
-        
-        print(c_Data,"9999999999")
-    
-        
+                                AND comment_type in %(ctypes)s
+                            order by creation desc
+                        """, {'doc': 'CE Task Manager', 'name': doca.name, 'ctypes': ('Comment','Workflow','Assigned','Assignment Completed')}, as_dict=True) 
+        html = """
+                <style>
+                table {
+                    font-family: Arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
 
-        # # Now you can use `formatted_html` in your email sending function
-        # print(formatted_html,"----")
-        #   #
-                            # AND comment_type = %(ctypes)s 
+                th, td {
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 8px;
+                }
+
+                th {
+                    background-color: #f2f2f2;
+                }
+            </style> <body> """
+        
+        processble_assign_to = [(get_user_fullname(i),i) for i in eval(asssinees[0]['_assign'])] if asssinees[0].get('_assign') else []
+        if doc.comment_type == 'Assigned':
+            cname,cemail = get_assign_to_email_from_assignment_string(doc.content)
+            if not processble_assign_to:
+                processble_assign_to.append((cname,cemail))
+            else:
+                # this is to check if Assigned Email is added in DB
+                isExits = True if cemail in [l[1] for l in processble_assign_to] else False
+                if not isExits:
+                    processble_assign_to.append((cname,cemail))
+                       
+        html += f"""
+            <h1> Task - {doca.subject} </h1>
+            <h4> Description - {doca.description} </h4>
+            <h4> Expected Start Date - {doca.start_date.strftime("%d-%b-%Y")  if doca.start_date else ""} </h4>
+            <h4> Expected Due Date - { doca.due_date.strftime("%d-%b-%Y") if doca.due_date  else ""} </h4>
+            <h4> Actual Start Date - {doca.actual_start_date.strftime("%d-%b-%Y")  if doca.actual_start_date else ""} </h4>
+            <h4> Actual Due Date - { doca.actual_end_date.strftime("%d-%b-%Y") if doca.actual_end_date  else ""} </h4>
+            <h4> Task Assign To - ({ "<br>".join([ i[0] +" : "+ i[1] for i in processble_assign_to]) if processble_assign_to else [] }) </h4>
+            <h4> Link - <a href={url}>{url}</a></h4>
+       
+
+            <table>
+                <tr>
+                    <th>Index</th>
+                    <th>Comment By</th>
+                    <th>Content</th>
+                    <th>Time</th>
+                   
+                </tr>
+            """
+    index = len(c_Data) 
+    for row in c_Data:
+        html += f"""
+        <tr>
+             <td>{index}</td>
+            <td>{ 'System' if row.get('comment_by',None) is None else row.get('comment_by') }</td>
+            <td>{row.get('content', '')}</td>
+            <td>{row.get('creation').strftime("%d-%b-%Y %I.%M %p")}</td>
+            
+        </tr>
+        """
+        index -= 1
+
+    html += """</body></table>"""
+    print(html)
+    assign_to = [i[1] for i in processble_assign_to] if len(processble_assign_to)>0 else []
+    if assign_to:
+        subject = f"Task - {doca.subject } Trails"
+        frappe.sendmail(recipients=assign_to, subject=subject, message=html,cc=doca.owner)
+        print('Email Success..!!')
+        doca.reply = 1
+        doca.save()
+        frappe.db.commit()
+
 
 
 

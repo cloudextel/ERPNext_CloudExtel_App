@@ -99,7 +99,8 @@ app_license = "li"
 # Permissions evaluated in scripted ways
 
 permission_query_conditions = {
-	"Task Manager":"cloudextel.events.apply_custom_filter_to_task_manager"
+	"Task Manager":"cloudextel.events.apply_custom_filter_to_task_manager",
+    "CE Task Manager":"cloudextel.events.apply_custom_filter_to_ce_task_manager"
 }
 #
 # has_permission = {
@@ -121,6 +122,9 @@ permission_query_conditions = {
 doc_events = {
     "Comment": {
         "after_insert": "cloudextel.notify.on_comment_add"
+    },
+    "Version":{
+        "after_insert":"cloudextel.scripts.add_comment_from_version"
     },
     "Task Manager":{
         "on_update":"cloudextel.notify.check_workflow_for_tm"
