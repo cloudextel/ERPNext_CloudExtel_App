@@ -11,25 +11,28 @@ class CETaskManager(NestedSet):
 @frappe.whitelist()
 def get_children(doctype, parent, task=None, is_root=False):
 
-	filters = [["docstatus", "<", "2"]]
+    filters = [["docstatus", "<", "2"]]
 
-	if task:
-		filters.append(["parent_ce_task_manager", "=", task])
-	elif parent and not is_root:
-		# via expand child
-		filters.append(["parent_ce_task_manager", "=", parent])
-	else:
-		filters.append(['ifnull(`parent_ce_task_manager`, "")', "=", ""])
+    if task:
+        filters.append(["parent_ce_task_manager", "=", task])
+    elif parent and not is_root:
+        # via expand child
+        filters.append(["parent_ce_task_manager", "=", parent])
+    else:
+        filters.append(['ifnull(`parent_ce_task_manager`, "")', "=", ""])
+        
+    print(filters)    
 
-	tasks = frappe.get_list(
-		doctype,
-		fields=["name as value", "subject as title", "is_group as expandable"],
-		filters=filters,
-		order_by="name",
-	)
+    tasks = frappe.get_list(
+        doctype,
+        fields=["name as value", "subject as title", "is_group as expandable"],
+        filters=filters,
+        ignore_permissions=True,
+        order_by="name",
+    )
 
-	# return tasks
-	return tasks	
+    # return tasks
+    return tasks	
 
 
 @frappe.whitelist()

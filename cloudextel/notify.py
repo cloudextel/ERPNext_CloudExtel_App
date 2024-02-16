@@ -232,32 +232,32 @@ def on_comment_add(doc, method):
                    
                 </tr>
             """
-    index = len(c_Data) 
-    for row in c_Data:
-        html += f"""
-        <tr>
-             <td>{index}</td>
-            <td>{row.get('content', '')}</td>
-             <td>{ 'System' if row.get('comment_by',None) is None else row.get('comment_by') }</td>
-            <td>{row.get('creation').strftime("%d-%b-%Y %I.%M %p")}</td>
-            
-        </tr>
-        """
-        index -= 1
+        index = len(c_Data) 
+        for row in c_Data:
+            html += f"""
+            <tr>
+                <td>{index}</td>
+                <td>{row.get('content', '')}</td>
+                <td>{ 'System' if row.get('comment_by',None) is None else row.get('comment_by') }</td>
+                <td>{row.get('creation').strftime("%d-%b-%Y %I.%M %p")}</td>
+                
+            </tr>
+            """
+            index -= 1
 
-    html += """</body></table>"""
-    print(html)
-    assign_to = [i[1] for i in processble_assign_to] if len(processble_assign_to)>0 else []
-    if "admin@example.com" in assign_to:
-        assign_to.remove("admin@example.com")
-    print(assign_to)    
-    if assign_to:
-        subject = f"Task - {doca.subject } Trails"
-        frappe.sendmail(recipients=assign_to, subject=subject, message=html,cc=doca.owner if doca.owner != 'Administrator' else []) 
-        print('Email Success..!!')
-        doca.reply = 1
-        doca.save()
-        frappe.db.commit()
+        html += """</body></table>"""
+        print(html)
+        assign_to = [i[1] for i in processble_assign_to] if len(processble_assign_to)>0 else []
+        if "admin@example.com" in assign_to:
+            assign_to.remove("admin@example.com")
+        print(assign_to)    
+        if assign_to:
+            subject = f"Task - {doca.subject } Trails"
+            frappe.sendmail(recipients=assign_to, subject=subject, message=html,cc=doca.owner if doca.owner != 'Administrator' else []) 
+            print('Email Success..!!')
+            doca.reply = 1
+            doca.save()
+            frappe.db.commit()
 
 
 
