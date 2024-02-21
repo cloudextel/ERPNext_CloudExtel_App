@@ -223,3 +223,6 @@ doc_events = {
 # auth_hooks = [
 #	"cloudextel.auth.validate"
 # ]
+fixtures = [
+    {'dt': 'List View Settings', 'filters': [["name", "=", "CE Task Manager"]]}
+]

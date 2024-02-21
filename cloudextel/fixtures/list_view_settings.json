@@ -1,0 +1,13 @@
+[
+    {
+        "disable_auto_refresh": 0,
+        "disable_count": 0,
+        "disable_sidebar_stats": 0,
+        "docstatus": 0,
+        "doctype": "List View Settings",
+        "fields": "[{\"fieldname\":\"subject\",\"label\":\"Subject\",\"width\":150},{\"fieldname\":\"lob\",\"label\":\"LOB\",\"width\":100},{\"fieldname\":\"category\",\"label\":\"Category\",\"width\":120},{\"fieldname\":\"team\",\"label\":\"Team\",\"width\":100},{\"fieldname\":\"start_date\",\"label\":\"Expected Start Date\",\"width\":150},{\"fieldname\":\"due_date\",\"label\":\"Expected Due Date\",\"width\":150},{\"fieldname\":\"status\",\"label\":\"Status\",\"width\":80},{\"fieldname\":\"age\",\"label\":\"Age\",\"width\":80},{\"fieldname\":\"is_group\",\"label\":\"Is Parent\",\"width\":80}]",
+        "modified": "2024-02-21 22:29:59.435975",
+        "name": "CE Task Manager",
+        "total_fields": "9"
+    }
+]
