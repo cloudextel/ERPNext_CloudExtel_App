@@ -94,7 +94,8 @@
    "fieldname": "age",
    "fieldtype": "Int",
    "label": "Age",
-   "read_only": 1
+   "read_only": 1,
+   "width": "3"
   },
   {
    "fieldname": "parent_ce_task_manager",
@@ -147,7 +148,7 @@
  "is_calendar_and_gantt": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2024-02-20 23:33:39.375961",
+ "modified": "2024-02-22 00:34:30.062541",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "CE Task Manager",
