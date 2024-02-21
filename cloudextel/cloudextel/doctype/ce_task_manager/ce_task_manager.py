@@ -8,6 +8,7 @@ from frappe.utils.nestedset import NestedSet
 class CETaskManager(NestedSet):
 	def validate(self):
 		""
+          
 
 @frappe.whitelist()
 def get_children(doctype, parent, task=None, is_root=False):

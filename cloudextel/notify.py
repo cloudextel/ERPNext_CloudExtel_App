@@ -8,7 +8,6 @@ import datetime
 
 
 
-
 def get_email_from_full_name(full_name):
     # Query the User document to get the email associated with the provided full name
     if full_name == 'Administrator':
@@ -215,6 +214,9 @@ def on_comment_add(doc, method):
         html += f"""
             <h1> Task - {doca.subject} </h1>
             <h4> Description - {doca.description} </h4>
+            <h4> LOB - {doca.lob} </h4>
+            <h4> Categoy- {doca.category} </h4>
+            <h4> Team - {doca.team} </h4>
             <h4> Expected Start Date - {doca.start_date.strftime("%d-%b-%Y")  if doca.start_date else ""} </h4>
             <h4> Expected Due Date - { doca.due_date.strftime("%d-%b-%Y") if doca.due_date  else ""} </h4>
             <h4> Actual Start Date - {doca.actual_start_date.strftime("%d-%b-%Y")  if doca.actual_start_date else ""} </h4>

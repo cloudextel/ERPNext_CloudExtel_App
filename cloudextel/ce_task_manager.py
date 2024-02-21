@@ -1,5 +1,5 @@
 import frappe
-from frappe.utils.data import getdate,today
+from frappe.utils.data import getdate,today,date_diff
 
 
 
@@ -73,5 +73,9 @@ def check_conditions(doc, method):
         if doc.get('status') =='In Progress':
             doc.actual_start_date = getdate(today())
         elif doc.get('status') == 'Close':
-            doc.actual_end_date = getdate(today())                 
+            doc.actual_end_date = getdate(today())  
+
+    if doc.get('due_date') and getdate(doc.get('due_date')) < getdate(today()):
+        doc.age = date_diff(today(),doc.get('due_date'))
+
             
