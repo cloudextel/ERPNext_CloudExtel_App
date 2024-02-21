@@ -1,4 +1,6 @@
 frappe.listview_settings['CE Task Manager'] = {
+    add_fields: ['subject', 'lob','category','team','status','start_date','due_date','age'],
+    hide_name_column: true,
     onload: function(listview) {
         listview.page.add_inner_button(
             `<i class="fa fa-calendar"></i> ${__('View My Task')}`,

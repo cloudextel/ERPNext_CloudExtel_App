@@ -12,12 +12,15 @@
  "field_order": [
   "subject",
   "is_group",
+  "lob",
+  "team",
   "start_date",
   "due_date",
   "actual_start_date",
   "actual_end_date",
   "age",
   "column_break_t391o",
+  "category",
   "status",
   "parent_ce_task_manager",
   "description",
@@ -43,7 +46,7 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Open\nWorking\nHold\nClose\nCancelled"
+   "options": "Open\nIn Progress\nHold\nClose\nCancelled"
   },
   {
    "default": "0",
@@ -117,13 +120,34 @@
    "fieldtype": "Date",
    "label": "Actual End Date",
    "read_only": 1
+  },
+  {
+   "fieldname": "lob",
+   "fieldtype": "Link",
+   "label": "LOB",
+   "options": "CE LOB",
+   "reqd": 1
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Link",
+   "label": "Category",
+   "options": "CE Category",
+   "reqd": 1
+  },
+  {
+   "fieldname": "team",
+   "fieldtype": "Link",
+   "label": "Team",
+   "options": "CE Team",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_calendar_and_gantt": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2024-02-14 23:07:50.429602",
+ "modified": "2024-02-20 23:33:39.375961",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "CE Task Manager",

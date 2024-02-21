@@ -27,7 +27,8 @@ frappe.ui.form.on('CE Task Manager', {
         });
     },
     check_page:(frm)=>{
-        if(!frm.doc.__islocal)
+        
+        if(!frm.doc.__islocal && frappe.session.user != 'Administrator')
         {
         frappe.call({
             method: 'cloudextel.cloudextel.doctype.ce_task_manager.ce_task_manager.is_assigned_or_created_by_user',

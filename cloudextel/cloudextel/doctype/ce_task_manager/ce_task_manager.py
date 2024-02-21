@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+import json
 from frappe.utils.nestedset import NestedSet
 
 class CETaskManager(NestedSet):
@@ -34,6 +35,26 @@ def get_children(doctype, parent, task=None, is_root=False):
     # return tasks
     return tasks	
 
+
+@frappe.whitelist()
+def add_multiple_tasks(data, parent):
+    ce_success= []
+    data = json.loads(data)
+    new_doc = {"doctype": "CE Task Manager", "parent_ce_task_manager": parent if parent != "All Tasks" else ""}
+
+    for d in data:
+        if not d.get("subject"):
+            continue
+        new_doc["subject"] = d.get("subject")
+        new_doc['lob'] = d.get('lob')
+        new_doc["category"] = d.get("category")
+        new_doc['team'] = d.get('team')
+        print(new_doc)
+        new_task = frappe.get_doc(new_doc)
+        new_task.insert()
+        ce_success.append(new_task.name)
+
+    return ce_success    
 
 @frappe.whitelist()
 def add_node():

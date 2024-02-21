@@ -38,16 +38,20 @@ frappe.treeview_settings['CE Task Manager'] = {
         );
 	},
     fields:[{
-        fieldtype:'Check', fieldname:'is_group', label:__('Is Group'),
-		description: __('Further accounts can be made under Groups, but entries can be made against non-Groups')
+        fieldtype:'Check', fieldname:'is_group', label:__('Is Parent'),
+		description: __('Further Task can be made under Parent, but entries can be made against non-Parent')
     }],
 	toolbar: [
+		
+		
 		{
 			label:__("Add Multiple"),
 			condition: function(node) {
 				return node.expandable;
 			},
 			click: function(node) {
+				let me = this
+				console.log(me)
 				this.data = [];
 				const dialog = new frappe.ui.Dialog({
 					title: __("Add Multiple Tasks"),
@@ -64,20 +68,54 @@ frappe.treeview_settings['CE Task Manager'] = {
 								in_list_view: 1,
 								reqd: 1,
 								label: __("Subject")
-							}]
+							},
+							{
+								fieldtype:'Link',
+								fieldname:"lob",
+								in_list_view: 1,
+								reqd: 1,
+								label: __("LOB"),
+								options:'CE LOB'
+							},
+							{
+								fieldtype:'Link',
+								fieldname:"category",
+								in_list_view: 1,
+								reqd: 1,
+								label: __("Category"),
+								options:'CE Category'
+							},
+							{
+								fieldtype:'Link',
+								fieldname:"team",
+								in_list_view: 1,
+								reqd: 1,
+								label: __("Team"),
+								options:'CE Team'
+							}
+						]
 						},
 					],
 					primary_action: function() {
 						dialog.hide();
-						// return frappe.call({
-						// 	method: "erpnext.projects.doctype.task.task.add_multiple_tasks",
-						// 	args: {
-						// 		data: dialog.get_values()["multiple_tasks"],
-						// 		parent: node.data.value
-						// 	},
-						// 	callback: function() { }
-						// });
-                        console.log('heheee')
+						console.log(dialog.get_values())
+						return frappe.call({
+							method: "cloudextel.cloudextel.doctype.ce_task_manager.ce_task_manager.add_multiple_tasks",
+							args: {
+								data: dialog.get_values()["multiple_tasks"],
+								parent: node.data.value
+							},
+							callback: function() { 
+								// frappe.treeview_settings['CE Task Manager'].get_tree_nodes(node);
+								var rebuildButton = document.querySelector('[data-label="Refresh"]');
+								// Trigger click event if the button is found
+								if (rebuildButton) {
+									rebuildButton.click();
+								} else {
+									console.log("Button not found");
+								}
+							}
+						});
 					},
 					primary_action_label: __('Create')
 				});

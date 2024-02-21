@@ -1,0 +1,62 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"_-fzp_1MUt\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Your Shortcuts</span>\",\"col\":12}},{\"id\":\"2rDuqHJSWu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Allowed Expense Items\",\"col\":4}},{\"id\":\"3sA1eRAumd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Allowed Revenue Account\",\"col\":4}},{\"id\":\"8XgtVQrMtj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Payment Terms Template\",\"col\":4}},{\"id\":\"Ugk4eTamUq\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"TDS Payable Monthly\",\"col\":4}},{\"id\":\"yShk-xeYIr\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"TDS Computation Summary\",\"col\":4}},{\"id\":\"EAZaBTM8mK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"CE Task Manager\",\"col\":3}}]",
+ "creation": "2020-06-22 18:57:27.240570",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "CloudExtel",
+ "links": [],
+ "modified": "2024-02-21 03:23:36.914864",
+ "modified_by": "Administrator",
+ "module": "CloudExtel",
+ "name": "CloudExtel",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 81.0,
+ "shortcuts": [
+  {
+   "label": "Allowed Expense Items",
+   "link_to": "Allowed Expense Items",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "Tree",
+   "label": "CE Task Manager",
+   "link_to": "CE Task Manager",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "label": "Allowed Revenue Account",
+   "link_to": "Allowed Revenue Account",
+   "type": "DocType"
+  },
+  {
+   "label": "Payment Terms Template",
+   "link_to": "Payment Terms Template",
+   "type": "DocType"
+  },
+  {
+   "label": "TDS Payable Monthly",
+   "link_to": "TDS Payable Monthly",
+   "type": "Report"
+  },
+  {
+   "label": "TDS Computation Summary",
+   "link_to": "TDS Computation Summary",
+   "type": "Report"
+  }
+ ],
+ "title": "CloudExtel"
+}

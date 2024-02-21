@@ -4,11 +4,11 @@ from frappe.utils.data import getdate,today
 
 
 workflow_conditions = {
-    'Open':['Working','Cancelled'],
-    'Working':['Close','Hold','Cancelled'],
+    'Open':['In Progress','Cancelled','Hold'],
+    'In Progress':['Close','Hold','Cancelled'],
     'Close':[],
-    'Hold':['Open'],
-    'Cancelled':['Open']
+    'Hold':['In Progress'],
+    'Cancelled':[]
 }
 
 
@@ -46,7 +46,7 @@ def check_conditions(doc, method):
     if old_doc and  old_doc.get('status') != doc.get('status'):
         validate_states(old_doc.get('status'),doc.get('status'))
 
-    if old_doc and old_doc.get('status') == 'Working' and doc.get('status') in ['Close', 'Hold', 'Cancelled']:
+    if old_doc and old_doc.get('status') == 'In Progress' and doc.get('status') in ['Close', 'Hold', 'Cancelled']:
         filters = {'parent_ce_task_manager': doc.name}
         if doc.get('status') == 'Close':
             filters['status'] = ['!=', 'Close']
@@ -70,7 +70,7 @@ def check_conditions(doc, method):
     if old_doc and old_doc.get('status') != doc.get('status'):
         comment_text =  generate_comment_text(old_doc.get('status'),doc.get('status'))   
         add_comment(doc_type='CE Task Manager',doc_name=doc.name,comment_text=comment_text,c_type='Workflow')
-        if doc.get('status') =='Working':
+        if doc.get('status') =='In Progress':
             doc.actual_start_date = getdate(today())
         elif doc.get('status') == 'Close':
             doc.actual_end_date = getdate(today())                 
