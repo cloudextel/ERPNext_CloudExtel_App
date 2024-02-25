@@ -1,3 +1,4 @@
+
 frappe.listview_settings['CE Task Manager'] = {
     
     add_fields: ['subject', 'lob','category','team','status','start_date','due_date','age'],

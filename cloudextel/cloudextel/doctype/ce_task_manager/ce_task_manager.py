@@ -23,15 +23,16 @@ def get_children(doctype, parent, task=None, is_root=False):
     else:
         filters.append(['ifnull(`parent_ce_task_manager`, "")', "=", ""]) 
         Flag = True
+        print(filters,'fh')
 
     tasks = frappe.get_list(
         doctype,
         fields=["name as value", "subject as title", "is_group as expandable"],
         filters=filters,
         ignore_permissions=True,
-        order_by="name",
+        order_by="name"
     )
-    if Flag and False:
+    if Flag:
         return permission_check(tasks)
 
     # return tasks
@@ -43,8 +44,13 @@ def check_task_permission(task_id, user):
     try:
         task = frappe.db.sql("select * from  `tabCE Task Manager` where name = %(id)s", {'id':task_id},as_dict = 1)[0]
         # Check if the user is either assignee or creator of the task
-        if user in task.get('_assign') or task.get('owner') == user:
-            return True
+        if task.get('_assign'):
+            if user in task.get('_assign') or task.get('owner') == user:
+                return True
+        else:
+            if task.get('owner') == user:
+                return True
+
         return False
     
     except Exception as e:
@@ -75,7 +81,18 @@ def get_all_children(parent_task_id, user):
 
 
 def permission_check(tasks):
-    ""
+    allowed_task = []
+    user = frappe.session.user
+    for task in tasks:
+        task_id = task.get('value')
+        print(task_id)
+        if check_task_permission(task_id,user):
+            allowed_task.append(task)
+        else:
+            permitted_task = get_all_children(task_id,user)
+            if len(permitted_task):
+                allowed_task.append(task)
+    return allowed_task
      
      
 

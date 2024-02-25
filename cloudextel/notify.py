@@ -264,9 +264,11 @@ def on_comment_add(doc, method):
 
 def get_filtered_assign_to(assign_to,cmt_by,doc_task):
     if cmt_by == doc_task.owner:
-        assign_to.remove(cmt_by)
+        if cmt_by in assign_to:   
+            assign_to.remove(cmt_by)
         return assign_to
-    assign_to.remove(cmt_by)
+    if cmt_by in assign_to:   
+        assign_to.remove(cmt_by)
     return assign_to
 
 
