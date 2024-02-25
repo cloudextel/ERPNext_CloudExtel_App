@@ -13,17 +13,16 @@ class CETaskManager(NestedSet):
 @frappe.whitelist()
 def get_children(doctype, parent, task=None, is_root=False):
 
-    filters = [["docstatus", "<", "2"]]
-
+    filters = [["docstatus", "<", "2"],["status","!=","Close"]]
+    Flag = False
     if task:
         filters.append(["parent_ce_task_manager", "=", task])
     elif parent and not is_root:
         # via expand child
         filters.append(["parent_ce_task_manager", "=", parent])
     else:
-        filters.append(['ifnull(`parent_ce_task_manager`, "")', "=", ""])
-        
-    print(filters)    
+        filters.append(['ifnull(`parent_ce_task_manager`, "")', "=", ""]) 
+        Flag = True
 
     tasks = frappe.get_list(
         doctype,
@@ -32,10 +31,53 @@ def get_children(doctype, parent, task=None, is_root=False):
         ignore_permissions=True,
         order_by="name",
     )
+    if Flag and False:
+        return permission_check(tasks)
 
     # return tasks
     return tasks	
 
+
+
+def check_task_permission(task_id, user):
+    try:
+        task = frappe.db.sql("select * from  `tabCE Task Manager` where name = %(id)s", {'id':task_id},as_dict = 1)[0]
+        # Check if the user is either assignee or creator of the task
+        if user in task.get('_assign') or task.get('owner') == user:
+            return True
+        return False
+    
+    except Exception as e:
+        return False
+
+def get_all_children(parent_task_id, user):
+    all_children = []
+
+    def get_children_recursive(task_id):
+        children = frappe.get_list(
+            "CE Task Manager",
+            fields=["name"],
+            filters={"parent_ce_task_manager": task_id, "docstatus": "< 2"},
+        )
+
+        for child in children:
+            all_children.append(child.name)
+            get_children_recursive(child.name)
+
+    get_children_recursive(parent_task_id)
+
+    permitted_tasks = []
+    for child_id in all_children:
+        if check_task_permission(child_id, user):
+            permitted_tasks.append(child_id)
+
+    return permitted_tasks
+
+
+def permission_check(tasks):
+    ""
+     
+     
 
 @frappe.whitelist()
 def add_multiple_tasks(data, parent):

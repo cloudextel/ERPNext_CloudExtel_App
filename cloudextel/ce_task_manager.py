@@ -75,7 +75,7 @@ def check_conditions(doc, method):
         elif doc.get('status') == 'Close':
             doc.actual_end_date = getdate(today())  
 
-    if doc.get('due_date') and getdate(doc.get('due_date')) < getdate(today()):
-        doc.age = date_diff(today(),doc.get('due_date'))
+    if doc.get('revised_due_date') and getdate(doc.get('revised_due_date')) < getdate(today()):
+        doc.age = date_diff(today(),doc.get('revised_due_date'))
 
             

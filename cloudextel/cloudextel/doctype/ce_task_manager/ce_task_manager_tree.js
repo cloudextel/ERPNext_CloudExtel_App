@@ -33,7 +33,7 @@ frappe.treeview_settings['CE Task Manager'] = {
 		me.page.add_inner_button(
             `<i class="fa fa-list"></i> ${__('View List')}`,
             function() {
-                window.open('/app/ce-task-manager/view/list/');
+                window.location.href = '/app/ce-task-manager/view/list/';
             }
         );
 	},

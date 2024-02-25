@@ -1,6 +1,10 @@
 frappe.ui.form.on('CE Task Manager', {
+    setup: function(frm) {
+       
+    },
     onload: function(frm) {
         frm.trigger('check_page');
+       
     },
 	refresh: function(frm) {
         frm.trigger('check_page');
@@ -26,7 +30,17 @@ frappe.ui.form.on('CE Task Manager', {
      
         });
     },
+    due_date:(frm)=>{
+        console.log(frm.doc.revised_due_date)
+        if(!frm.doc.revised_due_date || frappe.datetime.str_to_obj(frm.doc.revised_due_date) < frappe.datetime.str_to_obj(frm.doc.due_date)){
+            frm.set_value('revised_due_date',frm.doc.due_date)
+            frm.refresh_field('revised_due_date')
+        }
+    },
     check_page:(frm)=>{
+        frm.add_custom_button('Go To Tree View', () => {
+            window.location.href = '/app/ce-task-manager/view/tree/';
+        });
         
         if(!frm.doc.__islocal && frappe.session.user != 'Administrator')
         {

@@ -14,19 +14,19 @@
   "is_group",
   "lob",
   "team",
-  "start_date",
+  "category",
   "due_date",
+  "revised_due_date",
   "actual_start_date",
   "actual_end_date",
-  "age",
   "column_break_t391o",
-  "category",
-  "status",
   "parent_ce_task_manager",
+  "status",
+  "age",
   "description",
+  "is_root",
   "lft",
-  "rgt",
-  "is_root"
+  "rgt"
  ],
  "fields": [
   {
@@ -55,14 +55,10 @@
    "label": "Is Parent"
   },
   {
-   "fieldname": "start_date",
-   "fieldtype": "Date",
-   "label": "Expected Start Date"
-  },
-  {
    "fieldname": "due_date",
    "fieldtype": "Date",
-   "label": "Expected Due Date"
+   "label": "Original Due Date",
+   "read_only_depends_on": "eval:doc.owner != frappe.session.user"
   },
   {
    "fieldname": "lft",
@@ -111,12 +107,14 @@
    "label": "is_root"
   },
   {
+   "depends_on": "eval:['In Progress','Close'].includes(doc.status)",
    "fieldname": "actual_start_date",
    "fieldtype": "Date",
    "label": "Actual Start Date",
    "read_only": 1
   },
   {
+   "depends_on": "eval:doc.status == 'Close'",
    "fieldname": "actual_end_date",
    "fieldtype": "Date",
    "label": "Actual End Date",
@@ -142,13 +140,18 @@
    "label": "Team",
    "options": "CE Team",
    "reqd": 1
+  },
+  {
+   "fieldname": "revised_due_date",
+   "fieldtype": "Date",
+   "label": "Revised Due Date"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_calendar_and_gantt": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2024-02-22 00:34:30.062541",
+ "modified": "2024-02-25 22:59:09.428459",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "CE Task Manager",

@@ -217,14 +217,13 @@ def on_comment_add(doc, method):
             <h4> LOB - {doca.lob} </h4>
             <h4> Categoy- {doca.category} </h4>
             <h4> Team - {doca.team} </h4>
-            <h4> Expected Start Date - {doca.start_date.strftime("%d-%b-%Y")  if doca.start_date else ""} </h4>
-            <h4> Expected Due Date - { doca.due_date.strftime("%d-%b-%Y") if doca.due_date  else ""} </h4>
+            <h4> Original Due Date - { doca.due_date.strftime("%d-%b-%Y") if doca.due_date  else ""} </h4>
+            <h4> Revised Due Date - {doca.revised_due_date.strftime("%d-%b-%Y")  if doca.revised_due_date else ""} </h4>
             <h4> Actual Start Date - {doca.actual_start_date.strftime("%d-%b-%Y")  if doca.actual_start_date else ""} </h4>
             <h4> Actual Due Date - { doca.actual_end_date.strftime("%d-%b-%Y") if doca.actual_end_date  else ""} </h4>
             <h4> Task Assign To - ({ "<br>".join([ i[0] +" : "+ i[1] for i in processble_assign_to]) if processble_assign_to else [] }) </h4>
             <h4> Link - <a href={url}>{url}</a></h4>
        
-
             <table>
                 <tr>
                     <th>Index</th>
@@ -254,6 +253,7 @@ def on_comment_add(doc, method):
             assign_to.remove("admin@example.com")
         print(assign_to)    
         if assign_to:
+            assign_to = get_filtered_assign_to(assign_to,doc.comment_by,doca)
             subject = f"Task - {doca.subject } Trails"
             frappe.sendmail(recipients=assign_to, subject=subject, message=html,cc=doca.owner if doca.owner != 'Administrator' else []) 
             print('Email Success..!!')
@@ -262,7 +262,12 @@ def on_comment_add(doc, method):
             frappe.db.commit()
 
 
-
+def get_filtered_assign_to(assign_to,cmt_by,doc_task):
+    if cmt_by == doc_task.owner:
+        assign_to.remove(cmt_by)
+        return assign_to
+    assign_to.remove(cmt_by)
+    return assign_to
 
 
 def check_workflow_for_tm(doc,method):
