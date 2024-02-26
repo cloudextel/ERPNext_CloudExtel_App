@@ -351,6 +351,7 @@ def get_converted_list_of_tasks(task_dict):
 #         return li
 #     elif len(d) == 1:
 #         li.insert(0,d[0])
+
 #         return get_closed_hierarchy_tickets(d[0]['name'],li)
 #     elif len(d) > 1:
 #         for i in d:
