@@ -1,7 +1,7 @@
 
 frappe.listview_settings['CE Task Manager'] = {
     
-    add_fields: ['subject', 'lob','category','team','status','start_date','due_date','age'],
+    add_fields: ['subject', 'parent_ce_task_manager','lob','category','team','status','revised_due_date','age'],
     hide_name_column: true,
     onload: function(listview) {
         listview.page.add_inner_button(
