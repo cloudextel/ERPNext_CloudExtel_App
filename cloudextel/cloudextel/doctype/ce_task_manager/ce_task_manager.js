@@ -8,7 +8,7 @@ frappe.ui.form.on('CE Task Manager', {
     },
 	refresh: function(frm) {
         frm.trigger('check_page');
-        // Attach custom script to the linked field 'parent_ce_task_manager'
+        // Attach custom script to the linked field nn 'parent_ce_task_manager'
         frm.fields_dict['parent_ce_task_manager'].$input.on('click', function() {
            if(frm.doc.parent_ce_task_manager){
 			frappe.call({

@@ -1,13 +1,13 @@
 [
-    {
-        "disable_auto_refresh": 0,
-        "disable_count": 0,
-        "disable_sidebar_stats": 0,
-        "docstatus": 0,
-        "doctype": "List View Settings",
-        "fields": "[{\"fieldname\":\"subject\",\"label\":\"Subject\"},{\"fieldname\":\"lob\",\"label\":\"LOB\"},{\"fieldname\":\"category\",\"label\":\"Category\"},{\"fieldname\":\"team\",\"label\":\"Team\"},{\"fieldname\":\"start_date\",\"label\":\"Expected Start Date\"},{\"fieldname\":\"due_date\",\"label\":\"Expected Due Date\"},{\"fieldname\":\"status\",\"label\":\"Status\"},{\"fieldname\":\"age\",\"label\":\"Age\"},{\"fieldname\":\"is_group\",\"label\":\"Is Parent\"}]",
-        "modified": "2024-02-21 22:29:59.435975",
-        "name": "CE Task Manager",
-        "total_fields": "9"
-    }
+ {
+  "disable_auto_refresh": 0,
+  "disable_count": 0,
+  "disable_sidebar_stats": 0,
+  "docstatus": 0,
+  "doctype": "List View Settings",
+  "fields": "[{\"fieldname\":\"subject\",\"label\":\"Subject\"},{\"fieldname\":\"is_group\",\"label\":\"Is Parent\"},{\"fieldname\":\"lob\",\"label\":\"LOB\"},{\"fieldname\":\"team\",\"label\":\"Team\"},{\"fieldname\":\"category\",\"label\":\"Category\"},{\"fieldname\":\"status\",\"label\":\"Status\"},{\"fieldname\":\"revised_due_date\",\"label\":\"Revised Due Date\"},{\"fieldname\":\"age\",\"label\":\"Age\"}]",
+  "modified": "2024-02-26 18:30:54.564079",
+  "name": "CE Task Manager",
+  "total_fields": "9"
+ }
 ]
