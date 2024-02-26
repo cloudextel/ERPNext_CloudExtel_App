@@ -150,8 +150,13 @@
  "index_web_pages_for_search": 1,
  "is_calendar_and_gantt": 1,
  "is_tree": 1,
- "links": [],
- "modified": "2024-02-25 22:59:09.428459",
+ "links": [
+  {
+   "link_doctype": "CE Task Manager",
+   "link_fieldname": "parent_ce_task_manager"
+  }
+ ],
+ "modified": "2024-02-26 13:14:30.629283",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "CE Task Manager",
@@ -176,5 +181,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "subject"
+ "title_field": "subject",
+ "translated_doctype": 1
 }

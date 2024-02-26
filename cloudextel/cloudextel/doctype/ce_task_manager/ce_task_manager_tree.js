@@ -123,5 +123,47 @@ frappe.treeview_settings['CE Task Manager'] = {
 			}
 		}
 	],
-	extend_toolbar: true
+	extend_toolbar: true,
+	get_label: function(node) {
+        let label = node.label;
+        if (node.label != 'All Tasks') {
+			let creationDate = new Date(node.data.creation);
+			let options = {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true // Enable AM/PM
+            };
+            let formattedCreationDate = creationDate.toLocaleDateString('en-GB', options);
+			_assign_to = JSON.parse(node.data._assign || "[]")
+			if(_assign_to){
+				_assign_to = _assign_to.map((u)=>frappe.user_info(u))
+			}
+			console.log(_assign_to)
+
+            let d_label = "<b>Created By : </b>" + node.data.owner + "<br> " + "<b> Created On :</b>" + formattedCreationDate + "<br> <b>Task Assignees: </b>" + (_assign_to ? _assign_to.map(u => u.fullname).join(",") : [])
+            // Set title attribute with HTML content for hover tooltip
+            node.$tree_link.attr({
+                'title': d_label,
+                'data-toggle': 'tooltip',
+				'data-placement':"top",
+                'data-html': 'true',
+				'type':'button'
+            });
+
+			label = node.title + " (" + node.label + ")" + '<b> Age : ' + node.data.age + '</b>';
+            // Initialize Bootstrap tooltip with customized options
+            $('[data-toggle="tooltip"]').tooltip({
+                template: '<div class="tooltip custom-tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+                trigger: 'hover'
+            });
+
+			// label += `<div class="label-extra-info" style="display: inline-block; margin-left: 10px; float:right">
+            //                 <div style="display: inline-block;">${_assign_to ? _assign_to.map((d) => d.fullname).join(", ") : ""}</div>
+            //             </div>`;
+        }
+        return label;
+    }
 };

@@ -27,7 +27,7 @@ def get_children(doctype, parent, task=None, is_root=False):
 
     tasks = frappe.get_list(
         doctype,
-        fields=["name as value", "subject as title", "is_group as expandable"],
+        fields=["name as value", "subject as title", "is_group as expandable","age","_assign","creation","owner"],
         filters=filters,
         ignore_permissions=True,
         order_by="name"
