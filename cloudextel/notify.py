@@ -349,6 +349,7 @@ def get_converted_list_of_tasks(task_dict):
 #     d = frappe.get_all('Task Manager',fields=["*"],filters={'next_task_link':id,'status':'Closed'})
 #     if len(d) == 0:
 #         return li
+
 #     elif len(d) == 1:
 #         li.insert(0,d[0])
 
