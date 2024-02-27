@@ -160,7 +160,7 @@ frappe.treeview_settings['CE Task Manager'] = {
                 trigger: 'hover'
             });
 
-			// label += `<div class="label-extra-info" style="display: inline-block; margin-left: 10px; float:right">
+				// label += `<div class="label-extra-info" style="display: inline-block; margin-left: 10px; float:right">
             //                 <div style="display: inline-block;">${_assign_to ? _assign_to.map((d) => d.fullname).join(", ") : ""}</div>
             //             </div>`;
         }
