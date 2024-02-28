@@ -26,7 +26,9 @@
   "description",
   "is_root",
   "lft",
-  "rgt"
+  "rgt",
+  "teams",
+  "lobs"
  ],
  "fields": [
   {
@@ -122,9 +124,9 @@
   },
   {
    "fieldname": "lob",
-   "fieldtype": "Link",
+   "fieldtype": "Table MultiSelect",
    "label": "LOB",
-   "options": "CE LOB",
+   "options": "CE LOB Group",
    "reqd": 1
   },
   {
@@ -136,15 +138,29 @@
   },
   {
    "fieldname": "team",
-   "fieldtype": "Link",
+   "fieldtype": "Table MultiSelect",
    "label": "Team",
-   "options": "CE Team",
+   "options": "CE Team Group",
    "reqd": 1
   },
   {
    "fieldname": "revised_due_date",
    "fieldtype": "Date",
    "label": "Revised Due Date"
+  },
+  {
+   "fieldname": "lobs",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "LOB"
+  },
+  {
+   "fieldname": "teams",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Team",
+   "print_hide": 1,
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -156,7 +172,7 @@
    "link_fieldname": "parent_ce_task_manager"
   }
  ],
- "modified": "2024-02-26 13:14:30.629283",
+ "modified": "2024-02-28 19:08:26.572950",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "CE Task Manager",

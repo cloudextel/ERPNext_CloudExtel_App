@@ -6,9 +6,11 @@ import json
 from frappe.utils.nestedset import NestedSet
 
 class CETaskManager(NestedSet):
-	def validate(self):
-		""
-          
+    def before_save(self):
+        if self.lob:
+            self.lobs = ",".join([i.get('lob') for i in self.lob])
+        if self.team:
+            self.teams = ",".join([i.get('team') for i in self.team])  
 
 @frappe.whitelist()
 def get_children(doctype, parent, task=None, is_root=False):
@@ -106,9 +108,9 @@ def add_multiple_tasks(data, parent):
         if not d.get("subject"):
             continue
         new_doc["subject"] = d.get("subject")
-        new_doc['lob'] = d.get('lob')
+        new_doc['lob'] =[{'lob':i} for i in d.get('lob')]
         new_doc["category"] = d.get("category")
-        new_doc['team'] = d.get('team')
+        new_doc['team'] = [{'team':i} for i in d.get('team')]
         print(new_doc)
         new_task = frappe.get_doc(new_doc)
         new_task.insert()
@@ -116,20 +118,33 @@ def add_multiple_tasks(data, parent):
 
     return ce_success    
 
+
+import werkzeug  # Import the werkzeug module
+
 @frappe.whitelist()
 def add_node():
-	from frappe.desk.treeview import make_tree_args
+    from frappe.desk.treeview import make_tree_args
+    print(frappe.form_dict)
+    # Ensure that form_dict is converted to a dictionary
+    args = frappe.form_dict
+    if isinstance(args, werkzeug.local.LocalProxy):
+        # Access the underlying data of the LocalProxy object
+        args = args._get_current_object()
+    args.update({"name_field": "subject"})
+    
 
-	args = frappe.form_dict
-	args.update({"name_field": "subject"})
+    # Convert form_dict to a dictionary using eval
+    # args = args.get('data')
+    print(type(args))
+    args = make_tree_args(**args)
+    args['lob'] =eval(args.get('lob'))
+    args['team'] = eval(args.get('team'))
 
-	args = make_tree_args(**args)
-
-	if args.parent_ce_task_manager == "All Tasks":
-		args.parent_ce_task_manager = None
-		args.is_root = True
-
-	frappe.get_doc(args).insert()
+    if args.get("parent_ce_task_manager") == "All Tasks":
+        args["parent_ce_task_manager"] = None
+        args["is_root"] = True
+    print(args,type(args))
+    frappe.get_doc(args).insert()
 
 
 

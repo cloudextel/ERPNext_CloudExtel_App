@@ -58,10 +58,16 @@ frappe.treeview_settings['CE Task Manager'] = {
 					fields: [
 						{
 							fieldname: "multiple_tasks", fieldtype: "Table",
-							in_place_edit: true, data: this.data,
-							get_data: () => {
-								return this.data;
-							},
+							in_place_edit: true,
+							data: [],
+							get_data: function() {
+								// Get the data from the table rows
+								return this.data.map(row => ({
+									subject: row.subject,
+									lob: Array.isArray(row.lob) ? row.lob.join(", ") : row.lob, // Join multiselect values into a string
+									team: Array.isArray(row.team) ? row.team.join(", ") : row.team, // Join multiselect values into a string
+									category: row.category
+								}))},
 							fields: [{
 								fieldtype:'Data',
 								fieldname:"subject",
@@ -70,12 +76,36 @@ frappe.treeview_settings['CE Task Manager'] = {
 								label: __("Subject")
 							},
 							{
-								fieldtype:'Link',
+								fieldtype:'MultiSelectList',
 								fieldname:"lob",
 								in_list_view: 1,
-								reqd: 1,
+								reqd:1,
 								label: __("LOB"),
-								options:'CE LOB'
+								options:'CE LOB',
+								get_data: function(txt) {
+									return frappe.db.get_link_options('CE LOB', txt);
+								},
+								change: function(value, row_idx, fieldname) {
+                                    // Set the selected value to the table data
+									console.log(this,this.data)
+                                   this.doc['lob'] = this.values
+                                }
+							},
+							{
+								fieldtype:'MultiSelectList',
+								fieldname:"team",
+								in_list_view: 1,
+								reqd: 1,
+								label: __("Team"),
+								options:'CE Team',
+								get_data: function(txt) {
+									return frappe.db.get_link_options('CE Team', txt);
+								},
+								change: function(value) {
+                                    // Set the selected value to the table data
+									console.log(this.values)
+                                    this.doc['team'] = this.values
+                                }
 							},
 							{
 								fieldtype:'Link',
@@ -85,14 +115,7 @@ frappe.treeview_settings['CE Task Manager'] = {
 								label: __("Category"),
 								options:'CE Category'
 							},
-							{
-								fieldtype:'Link',
-								fieldname:"team",
-								in_list_view: 1,
-								reqd: 1,
-								label: __("Team"),
-								options:'CE Team'
-							}
+							
 						]
 						},
 					],
