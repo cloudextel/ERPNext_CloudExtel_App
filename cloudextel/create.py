@@ -10,7 +10,6 @@ def increment_last_two_digits(string):
 
 @frappe.whitelist()
 def perform_task():
-    return
     try:
         sqls = """
         SELECT DISTINCT p.name AS pname
@@ -18,7 +17,7 @@ def perform_task():
         INNER JOIN `tabDocument Naming Rule Condition` AS c  
         ON c.parent = p.name
         WHERE c.field = 'posting_month' 
-        AND c.value = 1
+        AND c.value = 2
         AND p.document_type = 'Sales Invoice'
         AND SUBSTRING(p.prefix, -4, 2) = '24' 
         AND p.disabled = 0

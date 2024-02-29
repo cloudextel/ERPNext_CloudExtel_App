@@ -214,8 +214,8 @@ def on_comment_add(doc, method):
         html += f"""
             <h1> Task - {doca.subject} </h1>
             <h4> Description - {doca.description} </h4>
-            <h4> LOB - {doca.lob} </h4>
-            <h4> Categoy- {doca.category} </h4>
+            <h4> LOB - {",".join([i.get('lob') for i in doca.lob]) if isinstance(doca.lob,list) else doca.lob} </h4>
+            <h4> Categoy- {",".join([i.get('team') for i in doca.team])if isinstance(doca.team,list) else doca.team} </h4>
             <h4> Team - {doca.team} </h4>
             <h4> Original Due Date - { doca.due_date.strftime("%d-%b-%Y") if doca.due_date  else ""} </h4>
             <h4> Revised Due Date - {doca.revised_due_date.strftime("%d-%b-%Y")  if doca.revised_due_date else ""} </h4>
@@ -223,7 +223,6 @@ def on_comment_add(doc, method):
             <h4> Actual Due Date - { doca.actual_end_date.strftime("%d-%b-%Y") if doca.actual_end_date  else ""} </h4>
             <h4> Task Assign To - ({ "<br>".join([ i[0] +" : "+ i[1] for i in processble_assign_to]) if processble_assign_to else [] }) </h4>
             <h4> Link - <a href={url}>{url}</a></h4>
-       
             <table>
                 <tr>
                     <th>Index</th>
