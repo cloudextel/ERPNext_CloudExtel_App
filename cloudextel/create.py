@@ -11,6 +11,7 @@ def increment_last_two_digits(string):
 @frappe.whitelist()
 def perform_task():
     try:
+        return
         month = 2
         sqls = """
         SELECT DISTINCT p.name AS pname
