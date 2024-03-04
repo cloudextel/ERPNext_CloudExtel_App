@@ -126,6 +126,7 @@ def add_node():
     from frappe.desk.treeview import make_tree_args
     print(frappe.form_dict)
     # Ensure that form_dict is converted to a dictionary
+    
     args = frappe.form_dict
     if isinstance(args, werkzeug.local.LocalProxy):
         # Access the underlying data of the LocalProxy object
