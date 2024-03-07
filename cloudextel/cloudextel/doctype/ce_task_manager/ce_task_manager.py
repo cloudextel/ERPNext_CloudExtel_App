@@ -10,7 +10,8 @@ class CETaskManager(NestedSet):
         if self.lob:
             self.lobs = ",".join([i.get('lob') for i in self.lob])
         if self.team:
-            self.teams = ",".join([i.get('team') for i in self.team])  
+            self.teams = ",".join([i.get('team') for i in self.team]) 
+             
 
 @frappe.whitelist()
 def get_children(doctype, parent, task=None, is_root=False):
@@ -127,6 +128,7 @@ def add_node():
     print(frappe.form_dict)
     # Ensure that form_dict is converted to a dictionary
     
+
     args = frappe.form_dict
     if isinstance(args, werkzeug.local.LocalProxy):
         # Access the underlying data of the LocalProxy object

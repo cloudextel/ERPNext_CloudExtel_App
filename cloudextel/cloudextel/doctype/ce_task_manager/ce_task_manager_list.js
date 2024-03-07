@@ -44,8 +44,7 @@ frappe.listview_settings['CE Task Manager'] = {
                     var age = frappe.datetime.get_diff(today, due_date) / (60 * 60 * 24);
                     row.age = age;
 
-                }
-             
+                }  
         });
         listview.refresh();
         console.log(listview.data,"---")
