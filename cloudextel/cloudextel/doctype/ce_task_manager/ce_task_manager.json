@@ -51,12 +51,6 @@
    "options": "Open\nIn Progress\nHold\nClose\nCancelled"
   },
   {
-   "default": "0",
-   "fieldname": "is_group",
-   "fieldtype": "Check",
-   "label": "Is Parent"
-  },
-  {
    "fieldname": "due_date",
    "fieldtype": "Date",
    "label": "Original Due Date",
@@ -172,7 +166,7 @@
    "link_fieldname": "parent_ce_task_manager"
   }
  ],
- "modified": "2024-02-28 19:08:26.572950",
+ "modified": "2024-03-08 11:20:55.552865",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "CE Task Manager",
@@ -193,6 +187,7 @@
    "write": 1
   }
  ],
+ "quick_entry": 1,
  "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
