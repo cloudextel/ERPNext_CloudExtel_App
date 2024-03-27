@@ -21,6 +21,7 @@
   "actual_end_date",
   "column_break_t391o",
   "parent_ce_task_manager",
+  "dependency_system",
   "status",
   "age",
   "description",
@@ -155,6 +156,11 @@
    "label": "Team",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "dependency_system",
+   "fieldtype": "Data",
+   "label": "Dependency System"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -166,7 +172,7 @@
    "link_fieldname": "parent_ce_task_manager"
   }
  ],
- "modified": "2024-03-08 11:20:55.552865",
+ "modified": "2024-03-27 16:19:15.540633",
  "modified_by": "Administrator",
  "module": "CloudExtel",
  "name": "CE Task Manager",
